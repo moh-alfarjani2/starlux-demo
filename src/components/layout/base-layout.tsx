@@ -2,10 +2,10 @@ import React from "react";
 import { Navbar } from "./navbar";
 import Link from "next/link";
 
-export const BaseLayout = ({ children }: { children: React.ReactNode }) => {
+export const BaseLayout = ({ children, transparentNavbar = false }: { children: React.ReactNode, transparentNavbar?: boolean }) => {
     return (
         <div className="font-sans">
-            <Navbar />
+            <Navbar transparent={transparentNavbar} />
             <main className="min-h-screen">
                 {children}
             </main>

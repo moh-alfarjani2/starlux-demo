@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Star, MapPin } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { MOCK_HOTELS } from "@/lib/mock-data";
 
 interface HotelCardProps {
     id: string;
@@ -69,44 +70,7 @@ export const HotelCard = ({ name, location, price, rating, image, reviews }: Hot
 };
 
 export const FeaturedHotels = () => {
-    const hotels = [
-        {
-            id: "1",
-            name: "The Grand Burj Resort",
-            location: "Dubai, UAE",
-            price: 1200,
-            rating: 4.9,
-            image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80&w=800",
-            reviews: 1240
-        },
-        {
-            id: "2",
-            name: "Royal Parisian Palace",
-            location: "Paris, France",
-            price: 850,
-            rating: 4.8,
-            image: "https://images.unsplash.com/photo-1551882547-ff43c61f1c90?auto=format&fit=crop&q=80&w=800",
-            reviews: 890
-        },
-        {
-            id: "3",
-            name: "Oceanic Blue Maldives",
-            location: "Malé, Maldives",
-            price: 2400,
-            rating: 5.0,
-            image: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800",
-            reviews: 450
-        },
-        {
-            id: "4",
-            name: "London Bridge Historic Stay",
-            location: "London, UK",
-            price: 550,
-            rating: 4.7,
-            image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800",
-            reviews: 2100
-        }
-    ];
+    const hotels = MOCK_HOTELS;
 
     return (
         <section className="py-24 px-6 bg-muted/30">

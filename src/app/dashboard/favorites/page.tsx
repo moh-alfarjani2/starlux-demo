@@ -7,25 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Star, MapPin, Heart, Trash2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+import { MOCK_FAVORITES } from "@/lib/mock-data";
+
 export default function FavoritesPage() {
-    const favorites = [
-        {
-            id: "1",
-            name: "The Grand Burj Resort",
-            location: "Dubai, UAE",
-            price: 1200,
-            rating: 4.9,
-            image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=400",
-        },
-        {
-            id: "2",
-            name: "Alpine Peak Lodge",
-            location: "Zermatt, Switzerland",
-            price: 850,
-            rating: 4.8,
-            image: "https://images.unsplash.com/photo-1502784444187-359ac186c5bb?auto=format&fit=crop&q=80&w=400",
-        }
-    ];
+    const favorites = MOCK_FAVORITES;
 
     return (
         <DashboardLayout role="guest">

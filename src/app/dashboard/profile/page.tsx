@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { User, Mail, Phone, ShieldCheck, Camera, CreditCard, Bell } from "lucide-react";
 
+import { MOCK_USER_PROFILE } from "@/lib/mock-data";
+
 export default function ProfilePage() {
+    const user = MOCK_USER_PROFILE;
+
     return (
         <DashboardLayout role="guest">
             <div className="space-y-8">
@@ -22,22 +26,22 @@ export default function ProfilePage() {
                         <Card className="p-8 text-center border-none luxury-shadow bg-white flex flex-col items-center">
                             <div className="relative group cursor-pointer mb-6">
                                 <div className="w-32 h-32 rounded-3xl bg-accent flex items-center justify-center text-accent-foreground text-4xl font-bold luxury-shadow overflow-hidden">
-                                    JD
+                                    {user.firstName[0]}{user.lastName[0]}
                                 </div>
                                 <div className="absolute inset-0 bg-black/40 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                                     <Camera size={24} />
                                 </div>
                             </div>
-                            <h2 className="text-2xl font-bold text-secondary">John Doe</h2>
-                            <p className="text-sm font-bold text-primary uppercase tracking-[0.2em] mb-4">Platinum Elite Member</p>
+                            <h2 className="text-2xl font-bold text-secondary">{user.firstName} {user.lastName}</h2>
+                            <p className="text-sm font-bold text-primary uppercase tracking-[0.2em] mb-4">{user.membership}</p>
                             <div className="w-full flex justify-center gap-4 border-t pt-6">
                                 <div className="text-center">
-                                    <p className="font-black text-secondary text-lg">24k</p>
+                                    <p className="font-black text-secondary text-lg">{user.stats.points}</p>
                                     <p className="text-[10px] text-muted-foreground uppercase font-bold">Reward Points</p>
                                 </div>
                                 <div className="w-px bg-muted h-10" />
                                 <div className="text-center">
-                                    <p className="font-black text-secondary text-lg">12</p>
+                                    <p className="font-black text-secondary text-lg">{user.stats.stays}</p>
                                     <p className="text-[10px] text-muted-foreground uppercase font-bold">Total Stays</p>
                                 </div>
                             </div>
@@ -64,21 +68,21 @@ export default function ProfilePage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <div className="space-y-4">
                                     <div className="relative">
-                                        <Input label="First Name" defaultValue="John" />
+                                        <Input label="First Name" defaultValue={user.firstName} />
                                         <User className="absolute right-4 top-11 text-muted-foreground/40" size={16} />
                                     </div>
                                     <div className="relative">
-                                        <Input label="Email Address" defaultValue="john.doe@example.com" type="email" />
+                                        <Input label="Email Address" defaultValue={user.email} type="email" />
                                         <Mail className="absolute right-4 top-11 text-muted-foreground/40" size={16} />
                                     </div>
                                 </div>
                                 <div className="space-y-4">
                                     <div className="relative">
-                                        <Input label="Last Name" defaultValue="Doe" />
+                                        <Input label="Last Name" defaultValue={user.lastName} />
                                         <User className="absolute right-4 top-11 text-muted-foreground/40" size={16} />
                                     </div>
                                     <div className="relative">
-                                        <Input label="Phone Number" defaultValue="+971 50 123 4567" />
+                                        <Input label="Phone Number" defaultValue={user.phone} />
                                         <Phone className="absolute right-4 top-11 text-muted-foreground/40" size={16} />
                                     </div>
                                 </div>
@@ -87,10 +91,10 @@ export default function ProfilePage() {
                             <h3 className="text-xl font-bold text-secondary mb-8 border-b pb-4">Mailing Address</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                                 <div className="md:col-span-2">
-                                    <Input label="Street Address" defaultValue="Penthouse 42, Burj Vista" />
+                                    <Input label="Street Address" defaultValue={user.address} />
                                 </div>
-                                <Input label="City" defaultValue="Dubai" />
-                                <Input label="Country" defaultValue="United Arab Emirates" />
+                                <Input label="City" defaultValue={user.city} />
+                                <Input label="Country" defaultValue={user.country} />
                             </div>
 
                             <div className="flex justify-end gap-4 border-t pt-8">

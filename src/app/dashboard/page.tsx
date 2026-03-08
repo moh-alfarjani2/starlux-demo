@@ -8,13 +8,16 @@ import { cn } from "@/lib/utils";
 import { CalendarDays, Heart, Star, MapPin, ChevronRight, Clock, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
+import { MOCK_STATS } from "@/lib/mock-data";
+
 export default function GuestDashboardPage() {
-    const stats = [
-        { label: "Total Bookings", value: "12", icon: <CalendarDays className="text-primary" />, color: "bg-primary/10" },
-        { label: "Wishlist", value: "24", icon: <Heart className="text-red-500" />, color: "bg-red-50" },
-        { label: "Reviews", value: "8", icon: <Star className="text-accent" />, color: "bg-accent/10" },
-        { label: "Points", value: "2.4k", icon: <ShieldCheck className="text-green-500" />, color: "bg-green-50" },
-    ];
+    const stats = MOCK_STATS.guest.map(s => ({
+        ...s,
+        icon: s.label === "Total Bookings" ? <CalendarDays className="text-primary" /> :
+            s.label === "Wishlist" ? <Heart className="text-red-500" /> :
+                s.label === "Reviews" ? <Star className="text-accent" /> :
+                    <ShieldCheck className="text-green-500" />
+    }));
 
     return (
         <DashboardLayout role="guest">

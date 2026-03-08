@@ -7,48 +7,7 @@ import { FiltersSidebar } from "@/components/hotel/filters";
 import { ChevronDown, Map, LayoutGrid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const MOCK_HOTELS = [
-    {
-        id: "1",
-        name: "The Grand Burj Resort",
-        location: "Dubai, UAE",
-        price: 1200,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800",
-        amenities: ["Free WiFi", "Infinity Pool", "Spa", "Private Beach"],
-        reviews: 1240
-    },
-    {
-        id: "2",
-        name: "Royal Parisian Palace",
-        location: "Paris, France",
-        price: 850,
-        rating: 4.8,
-        image: "/paris-palace.png",
-        amenities: ["Classic Architecture", "Michelin Dining", "Valet"],
-        reviews: 890
-    },
-    {
-        id: "3",
-        name: "Oceanic Blue Maldives",
-        location: "Malé, Maldives",
-        price: 2400,
-        rating: 5.0,
-        image: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800",
-        amenities: ["Overwater Villa", "All inclusive", "Diving"],
-        reviews: 450
-    },
-    {
-        id: "4",
-        name: "Alpine Peak Lodge",
-        location: "Zermatt, Switzerland",
-        price: 980,
-        rating: 4.7,
-        image: "https://images.unsplash.com/photo-1502784444187-359ac186c5bb?auto=format&fit=crop&q=80&w=800",
-        amenities: ["Ski-in/Ski-out", "Fireplace", "Mountain View"],
-        reviews: 670
-    }
-];
+import { MOCK_HOTELS } from "@/lib/mock-data";
 
 export default function HotelsPage() {
     return (

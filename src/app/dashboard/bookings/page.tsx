@@ -7,29 +7,11 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Clock, CreditCard, Download, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
+import { MOCK_BOOKINGS } from "@/lib/mock-data";
+import { cn } from "@/lib/utils";
+
 export default function MyBookingsPage() {
-    const bookings = [
-        {
-            id: "SLX-A1B2C3D4",
-            hotel: "The Grand Burj Resort",
-            location: "Dubai, UAE",
-            dates: "Oct 12 — Oct 15, 2026",
-            price: "$3,800",
-            status: "Confirmed",
-            image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=400",
-            isUpcoming: true
-        },
-        {
-            id: "SLX-X5Y6Z7W8",
-            hotel: "Alpine Peak Lodge",
-            location: "Zermatt, Switzerland",
-            dates: "Jan 15 — Jan 20, 2026",
-            price: "$4,500",
-            status: "Completed",
-            image: "https://images.unsplash.com/photo-1502784444187-359ac186c5bb?auto=format&fit=crop&q=80&w=400",
-            isUpcoming: false
-        }
-    ];
+    const bookings = MOCK_BOOKINGS;
 
     return (
         <DashboardLayout role="guest">

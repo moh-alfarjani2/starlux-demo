@@ -31,6 +31,8 @@ export const viewport = {
   initialScale: 1,
 };
 
+import { DemoWarningModal } from "@/components/layout/demo-warning-modal";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,6 +43,17 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${inter.variable} font-sans antialiased`}
       >
+        {/* Hide Next.js Dev Tools Overlay in Demo */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          #next-logo, [data-next-mark="true"], [data-nextjs-dev-tools-button] { 
+            display: none !important; 
+            visibility: hidden !important; 
+            pointer-events: none !important;
+            opacity: 0 !important;
+          }
+        `}} />
+        <DemoWarningModal />
         {children}
       </body>
     </html>

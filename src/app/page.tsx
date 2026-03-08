@@ -7,7 +7,7 @@ import { ArrowRight, Globe, ShieldCheck, Zap } from "lucide-react";
 
 export default function Home() {
   return (
-    <BaseLayout>
+    <BaseLayout transparentNavbar={true}>
       <Hero />
 
       {/* Why Choose Us Section */}
