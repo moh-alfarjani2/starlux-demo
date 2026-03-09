@@ -1,7 +1,5 @@
-"use client";
-
 import React from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MoveLeft, HelpCircle } from "lucide-react";
 
@@ -21,12 +19,12 @@ export default function NotFound() {
                 </p>
 
                 <div className="space-y-4">
-                    <Link href="/">
+                    <Link to="/">
                         <Button variant="gold" className="w-full py-7 text-lg rounded-xl font-bold">
                             <MoveLeft className="mr-2" size={20} /> Return to Homepage
                         </Button>
                     </Link>
-                    <Link href="/hotels">
+                    <Link to="/hotels">
                         <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
                             Explore All Hotels
                         </Button>

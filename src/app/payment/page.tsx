@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Lock, CreditCard, ShieldCheck, ChevronLeft, CreditCard as CardIcon } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 export default function PaymentPage() {
     return (
@@ -35,7 +35,7 @@ export default function PaymentPage() {
                         {/* Payment Form */}
                         <div className="space-y-8">
                             <div>
-                                <Link href="/booking" className="text-sm font-medium text-primary hover:underline flex items-center gap-1 mb-6">
+                                <Link to="/booking" className="text-sm font-medium text-primary hover:underline flex items-center gap-1 mb-6">
                                     <ChevronLeft size={16} /> Edit guest information
                                 </Link>
                                 <h2 className="text-3xl font-bold text-secondary mb-2">Payment Method</h2>
@@ -117,7 +117,7 @@ export default function PaymentPage() {
                                     <span className="text-4xl font-black text-accent">$3,800.00</span>
                                 </div>
 
-                                <Link href="/confirmation">
+                                <Link to="/confirmation">
                                     <Button variant="gold" size="lg" className="w-full py-8 text-xl font-bold rounded-xl active:scale-95 transition-all">
                                         Pay Now
                                     </Button>

@@ -5,12 +5,13 @@ import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin, Heart, Trash2, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
-import { MOCK_FAVORITES } from "@/lib/mock-data";
+import { useStarlux } from "@/context/starlux-context";
 
 export default function FavoritesPage() {
-    const favorites = MOCK_FAVORITES;
+    const { db, toggleFavorite } = useStarlux();
+    const favorites = db.hotels.filter(h => db.favorites.includes(h.id));
 
     return (
         <DashboardLayout role="guest">
@@ -22,12 +23,17 @@ export default function FavoritesPage() {
 
                 {favorites.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {favorites.map((hotel) => (
+                        {favorites.map((hotel: any) => (
                             <Card key={hotel.id} className="p-0 border-none luxury-shadow bg-white overflow-hidden group">
                                 <div className="h-48 relative overflow-hidden">
                                     <img src={hotel.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={hotel.name} />
                                     <div className="absolute top-4 right-4">
-                                        <Button variant="ghost" size="icon" className="bg-white/20 backdrop-blur-md text-white hover:text-red-500 rounded-full">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="bg-white/20 backdrop-blur-md text-white hover:text-red-500 rounded-full"
+                                            onClick={() => toggleFavorite(hotel.id)}
+                                        >
                                             <Trash2 size={18} />
                                         </Button>
                                     </div>
@@ -47,7 +53,7 @@ export default function FavoritesPage() {
                                             <span className="text-lg font-black text-primary">${hotel.price}</span>
                                             <span className="text-xs text-muted-foreground">/ night</span>
                                         </div>
-                                        <Link href={`/hotels/${hotel.id}`}>
+                                        <Link to={`/hotels/view?id=${hotel.id}`}>
                                             <Button variant="ghost" className="text-primary font-bold text-sm p-0 hover:bg-transparent group/btn">
                                                 Book Now <ArrowRight size={14} className="ml-1 transition-transform group-hover/btn:translate-x-1" />
                                             </Button>
@@ -62,7 +68,7 @@ export default function FavoritesPage() {
                         <Heart size={64} className="text-muted/30 mb-6" />
                         <h2 className="text-2xl font-bold text-secondary">No favorites yet</h2>
                         <p className="text-muted-foreground italic mb-8">Start exploring the world to build your luxury wishlist.</p>
-                        <Link href="/hotels">
+                        <Link to="/hotels">
                             <Button variant="gold" className="rounded-xl px-8">Find Hotels</Button>
                         </Link>
                     </div>

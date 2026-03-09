@@ -1,8 +1,11 @@
 import React from "react";
 import { Navbar } from "./navbar";
-import Link from "next/link";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 export const BaseLayout = ({ children, transparentNavbar = false }: { children: React.ReactNode, transparentNavbar?: boolean }) => {
+    const { pathname } = useLocation();
+
     return (
         <div className="font-sans">
             <Navbar transparent={transparentNavbar} />
@@ -26,19 +29,19 @@ export const BaseLayout = ({ children, transparentNavbar = false }: { children: 
                     <div>
                         <h4 className="font-bold mb-6 text-accent">Discover</h4>
                         <ul className="space-y-4 text-white/70">
-                            <li><Link href="/hotels" className="hover:text-white transition-colors">Hotels in Dubai</Link></li>
-                            <li><Link href="/hotels" className="hover:text-white transition-colors">London Escapes</Link></li>
-                            <li><Link href="/hotels" className="hover:text-white transition-colors">Parisian Luxury</Link></li>
-                            <li><Link href="/hotels" className="hover:text-white transition-colors">Beach Resorts</Link></li>
+                            <li><Link to="/hotels" className="hover:text-white transition-colors">Hotels in Dubai</Link></li>
+                            <li><Link to="/hotels" className="hover:text-white transition-colors">London Escapes</Link></li>
+                            <li><Link to="/hotels" className="hover:text-white transition-colors">Parisian Luxury</Link></li>
+                            <li><Link to="/hotels" className="hover:text-white transition-colors">Beach Resorts</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h4 className="font-bold mb-6 text-accent">Company</h4>
                         <ul className="space-y-4 text-white/70">
-                            <li><Link href="/hotels" className="hover:text-white transition-colors">About Us</Link></li>
-                            <li><Link href="/hotels" className="hover:text-white transition-colors">Contact</Link></li>
-                            <li><Link href="/owner" className="hover:text-white transition-colors">Partner with us</Link></li>
-                            <li><Link href="/hotels" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                            <li><Link to="/about" className={cn("hover:text-white transition-colors", pathname === "/about" && "text-accent font-bold")}>About Us</Link></li>
+                            <li><Link to="/contact" className={cn("hover:text-white transition-colors", pathname === "/contact" && "text-accent font-bold")}>Contact</Link></li>
+                            <li><Link to="/owner" className={cn("hover:text-white transition-colors", pathname === "/owner" && "text-accent font-bold")}>Partner with us</Link></li>
+                            <li><Link to="/terms" className={cn("hover:text-white transition-colors", pathname === "/terms" && "text-accent font-bold")}>Terms of Service</Link></li>
                         </ul>
                     </div>
                     <div>

@@ -1,16 +1,17 @@
-"use client";
-
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { BaseLayout } from "@/components/layout/base-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ShieldCheck, Info, CreditCard, ChevronRight, Calendar, Users, MapPin } from "lucide-react";
-import Link from "next/link";
+
+import { useStarlux } from "@/context/starlux-context";
 
 export default function BookingPage() {
-    const router = useRouter();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const { addBooking } = useStarlux();
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -18,9 +19,28 @@ export default function BookingPage() {
         phone: ""
     });
 
+    const hotelName = searchParams.get("hotel") || "The Grand Burj Resort";
+    const hotelPrice = searchParams.get("price") || "$3,800";
+    const hotelImage = searchParams.get("image") || "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=400";
+    const hotelLocation = searchParams.get("location") || "Dubai, UAE";
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        router.push("/payment");
+
+        // Create mock booking with dynamic data
+        const newBooking = {
+            id: `SLX-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+            hotel: hotelName,
+            location: hotelLocation,
+            dates: "Oct 12 — Oct 15, 2026",
+            price: hotelPrice,
+            status: "Confirmed",
+            image: hotelImage,
+            isUpcoming: true
+        };
+
+        addBooking(newBooking);
+        navigate("/confirmation");
     };
 
     return (
@@ -118,12 +138,12 @@ export default function BookingPage() {
                                 <div className="grid gap-6 sticky top-28">
                                     <Card className="overflow-hidden border-none luxury-shadow bg-white">
                                         <div className="h-40 w-full relative">
-                                            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Hotel" />
+                                            <img src={hotelImage} className="w-full h-full object-cover" alt="Hotel" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                             <div className="absolute bottom-4 left-4 text-white">
-                                                <h3 className="font-bold text-lg">The Grand Burj Resort</h3>
+                                                <h3 className="font-bold text-lg">{hotelName}</h3>
                                                 <div className="flex items-center gap-1 text-xs opacity-80">
-                                                    <MapPin size={10} /> Dubai, UAE
+                                                    <MapPin size={10} /> {hotelLocation}
                                                 </div>
                                             </div>
                                         </div>
@@ -162,7 +182,7 @@ export default function BookingPage() {
 
                                             <div className="flex justify-between items-end">
                                                 <span className="text-lg font-bold text-secondary">Total (USD)</span>
-                                                <span className="text-3xl font-black text-primary">$3,800</span>
+                                                <span className="text-3xl font-black text-primary">{hotelPrice}</span>
                                             </div>
                                         </div>
                                     </Card>

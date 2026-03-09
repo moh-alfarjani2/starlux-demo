@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
     Dialog,
@@ -10,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { User, Briefcase, ShieldCheck, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 interface DemoAccessModalProps {
     isOpen: boolean;
@@ -57,7 +55,7 @@ export const DemoAccessModal = ({ isOpen, onClose }: DemoAccessModalProps) => {
 
                 <div className="p-6 bg-white space-y-4">
                     {roles.map((role) => (
-                        <Link key={role.href} href={role.href} onClick={onClose}>
+                        <Link key={role.href} to={role.href} onClick={onClose}>
                             <div className="group flex items-center gap-4 p-4 rounded-xl border border-transparent hover:border-primary/20 hover:bg-muted/30 transition-all cursor-pointer">
                                 <div className={`p-3 rounded-xl ${role.color} group-hover:scale-110 transition-transform`}>
                                     {role.icon}

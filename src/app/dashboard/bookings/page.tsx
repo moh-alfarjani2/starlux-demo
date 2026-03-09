@@ -5,13 +5,14 @@ import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Clock, CreditCard, Download, ExternalLink } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
-import { MOCK_BOOKINGS } from "@/lib/mock-data";
+import { useStarlux } from "@/context/starlux-context";
 import { cn } from "@/lib/utils";
 
 export default function MyBookingsPage() {
-    const bookings = MOCK_BOOKINGS;
+    const { db } = useStarlux();
+    const { bookings } = db;
 
     return (
         <DashboardLayout role="guest">
@@ -28,7 +29,7 @@ export default function MyBookingsPage() {
                 </div>
 
                 <div className="space-y-6">
-                    {bookings.map((booking, i) => (
+                    {bookings.map((booking: any, i: number) => (
                         <Card key={i} className="p-0 border-none luxury-shadow bg-white overflow-hidden group">
                             <div className="flex flex-col lg:flex-row justify-between">
                                 {/* Hotel Info */}
@@ -59,7 +60,7 @@ export default function MyBookingsPage() {
                                 <div className="p-8 bg-muted/20 lg:w-72 flex lg:flex-col gap-3 border-t lg:border-t-0 lg:border-l items-center justify-center">
                                     {booking.isUpcoming ? (
                                         <>
-                                            <Link href={`/hotels/${booking.id}`} className="w-full">
+                                            <Link to={`/hotels/view?id=${booking.id}`} className="w-full">
                                                 <Button variant="primary" className="w-full gap-2">
                                                     <ExternalLink size={16} /> View Details
                                                 </Button>

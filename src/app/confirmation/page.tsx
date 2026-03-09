@@ -1,18 +1,24 @@
-"use client";
-
 import React from "react";
 import { BaseLayout } from "@/components/layout/base-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle2, Download, Printer, Home, Calendar, MapPin, User, Mail, CreditCard, ChevronRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
+
+import { useStarlux } from "@/context/starlux-context";
 
 export default function ConfirmationPage() {
-    const [reservationId, setReservationId] = React.useState<string>("");
+    const { db } = useStarlux();
+    const { profile, bookings } = db;
+    const lastBooking = bookings[0] || {
+        id: "SLX-DEMO",
+        hotel: "The Grand Burj Resort",
+        location: "Downtown Dubai, UAE",
+        dates: "Oct 12 - 15, 2026",
+        price: "$3,800.00"
+    };
 
-    React.useEffect(() => {
-        setReservationId("SLX-" + Math.random().toString(36).substring(2, 9).toUpperCase());
-    }, []);
+    const reservationId = lastBooking.id;
 
     return (
         <BaseLayout>
@@ -58,9 +64,9 @@ export default function ConfirmationPage() {
                                         <div className="p-3 bg-muted rounded-xl text-primary h-fit"><Home size={20} /></div>
                                         <div>
                                             <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Property</h3>
-                                            <p className="font-bold text-secondary text-lg">The Grand Burj Resort</p>
+                                            <p className="font-bold text-secondary text-lg">{lastBooking.hotel}</p>
                                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                                <MapPin size={12} /> Downtown Dubai, UAE
+                                                <MapPin size={12} /> {lastBooking.location}
                                             </div>
                                         </div>
                                     </div>
@@ -69,14 +75,9 @@ export default function ConfirmationPage() {
                                         <div className="p-3 bg-muted rounded-xl text-primary h-fit"><Calendar size={20} /></div>
                                         <div className="grid grid-cols-2 gap-8">
                                             <div>
-                                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Check-in</h3>
-                                                <p className="font-bold text-secondary">Oct 12, 2026</p>
-                                                <p className="text-[10px] text-muted-foreground">From 14:00</p>
-                                            </div>
-                                            <div>
-                                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Check-out</h3>
-                                                <p className="font-bold text-secondary">Oct 15, 2026</p>
-                                                <p className="text-[10px] text-muted-foreground">Until 12:00</p>
+                                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Stay Dates</h3>
+                                                <p className="font-bold text-secondary">{lastBooking.dates}</p>
+                                                <p className="text-[10px] text-muted-foreground">Check-in from 14:00</p>
                                             </div>
                                         </div>
                                     </div>
@@ -85,8 +86,8 @@ export default function ConfirmationPage() {
                                         <div className="p-3 bg-muted rounded-xl text-primary h-fit"><User size={20} /></div>
                                         <div>
                                             <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Guest Details</h3>
-                                            <p className="font-bold text-secondary">Mr. John Doe</p>
-                                            <p className="text-sm text-muted-foreground">2 Adults • Deluxe King Room</p>
+                                            <p className="font-bold text-secondary">{profile.firstName} {profile.lastName}</p>
+                                            <p className="text-sm text-muted-foreground">Premium Member • {lastBooking.price}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +105,7 @@ export default function ConfirmationPage() {
                                             </div>
                                             <div className="flex justify-between items-end pt-2">
                                                 <span className="text-secondary font-bold">Total Amount</span>
-                                                <span className="text-2xl font-black text-primary">$3,800.00</span>
+                                                <span className="text-2xl font-black text-primary">{lastBooking.price}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +119,7 @@ export default function ConfirmationPage() {
                                         <Button variant="outline" className="w-full justify-start border-muted-foreground/20 hover:bg-white bg-white">
                                             <Printer className="mr-3" size={18} /> Print Confirmation
                                         </Button>
-                                        <Link href="/" className="block">
+                                        <Link to="/" className="block">
                                             <Button variant="primary" className="w-full">
                                                 Back to Homepage
                                             </Button>
@@ -131,7 +132,7 @@ export default function ConfirmationPage() {
                         {/* Bottom Accent */}
                         <div className="bg-accent/10 p-4 border-t border-accent/20 flex items-center justify-center gap-2">
                             <Mail className="text-accent" size={16} />
-                            <p className="text-xs text-secondary font-medium">A copy of this confirmation has been sent to john@example.com</p>
+                            <p className="text-xs text-secondary font-medium">A copy of this confirmation has been sent to {profile.email}</p>
                         </div>
                     </Card>
 
@@ -150,7 +151,7 @@ export default function ConfirmationPage() {
                             <div className="p-2 bg-accent/10 rounded-lg text-accent"><CheckCircle2 size={20} /></div>
                             <div>
                                 <h4 className="font-bold text-secondary mb-1">Manage Booking</h4>
-                                <Link href="/dashboard/bookings" className="text-xs text-primary font-bold inline-flex items-center hover:underline">
+                                <Link to="/dashboard/bookings" className="text-xs text-primary font-bold inline-flex items-center hover:underline">
                                     Go to my dashboard <ChevronRight size={12} />
                                 </Link>
                             </div>

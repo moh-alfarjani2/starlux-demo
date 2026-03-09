@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card } from "@/components/ui/card";
@@ -18,25 +16,31 @@ import {
     BarChart3,
     Settings
 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "react-router-dom";
 import { MOCK_STATS } from "@/lib/mock-data";
 
+import { useStarlux } from "@/context/starlux-context";
+
 export default function OwnerDashboardPage() {
-    const searchParams = useSearchParams();
+    const { db } = useStarlux();
+    const [searchParams] = useSearchParams();
     const activeTab = searchParams.get("tab") || "overview";
 
-    const statsArray = MOCK_STATS.owner || [];
-    const stats = statsArray.map(s => ({
-        ...s,
-        icon: s.label === "Total Revenue" ? <DollarSign /> :
-            s.label === "Bookings" ? <Calendar /> :
-                s.label === "Avg. Occupancy" ? <TrendingUp /> :
-                    <Hotel />,
-        color: s.label === "Total Revenue" ? "bg-green-100 text-green-600" :
-            s.label === "Bookings" ? "bg-blue-100 text-blue-600" :
-                s.label === "Avg. Occupancy" ? "bg-orange-100 text-orange-600" :
-                    "bg-primary/10 text-primary"
-    }));
+    // Dynamic stats calculation (simulated for owner)
+    const ownerHotels = db.hotels.length; // In demo, assume owner sees all
+    const ownerBookings = db.bookings.length;
+    const ownerRevenue = db.bookings.reduce((sum, b) => {
+        const priceNum = parseFloat((b.price || "0").replace(/[$,]/g, ""));
+        return sum + (isNaN(priceNum) ? 0 : priceNum);
+    }, 0);
+    const occupancyRate = "84%";
+
+    const stats = [
+        { label: "Total Revenue", value: `$${ownerRevenue.toLocaleString()}`, change: "12%", isUp: true, icon: <DollarSign />, color: "bg-green-100 text-green-600" },
+        { label: "Bookings", value: ownerBookings.toString(), change: "8%", isUp: true, icon: <Calendar />, color: "bg-blue-100 text-blue-600" },
+        { label: "Avg. Occupancy", value: occupancyRate, change: "4%", isUp: true, icon: <TrendingUp />, color: "bg-orange-100 text-orange-600" },
+        { label: "Properties", value: ownerHotels.toString(), change: "0%", isUp: true, icon: <Hotel />, color: "bg-primary/10 text-primary" }
+    ];
 
     return (
         <DashboardLayout role="owner">

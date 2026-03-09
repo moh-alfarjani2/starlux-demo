@@ -1,17 +1,25 @@
-"use client";
-
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin, Calendar, Users, Search } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 export const Hero = () => {
-    const router = useRouter();
+    const navigate = useNavigate();
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        router.push("/hotels");
+        const form = e.target as HTMLFormElement;
+        const location = (form.elements.namedItem("location") as HTMLInputElement)?.value || "";
+        const dates = (form.elements.namedItem("dates") as HTMLInputElement)?.value || "";
+        const guests = (form.elements.namedItem("guests") as HTMLInputElement)?.value || "";
+
+        const params = new URLSearchParams();
+        if (location) params.set("location", location);
+        if (dates) params.set("dates", dates);
+        if (guests) params.set("guests", guests);
+
+        navigate(`/hotels?${params.toString()}`);
     };
 
     return (
@@ -43,6 +51,7 @@ export const Hero = () => {
                                 <MapPin size={14} /> Location
                             </label>
                             <input
+                                name="location"
                                 type="text"
                                 placeholder="Where are you going?"
                                 className="bg-transparent border-none outline-none w-full text-secondary font-medium placeholder:text-secondary/50"
@@ -55,6 +64,7 @@ export const Hero = () => {
                                 <Calendar size={14} /> Stay Dates
                             </label>
                             <input
+                                name="dates"
                                 type="text"
                                 placeholder="Check-in — Check-out"
                                 className="bg-transparent border-none outline-none w-full text-secondary font-medium placeholder:text-secondary/50"
@@ -67,6 +77,7 @@ export const Hero = () => {
                                 <Users size={14} /> Guests
                             </label>
                             <input
+                                name="guests"
                                 type="text"
                                 placeholder="2 Adults, 1 Room"
                                 className="bg-transparent border-none outline-none w-full text-secondary font-medium placeholder:text-secondary/50"

@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card } from "@/components/ui/card";
@@ -17,24 +15,31 @@ import {
     Clock
 } from "lucide-react";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "react-router-dom";
 import { MOCK_STATS } from "@/lib/mock-data";
 
+import { useStarlux } from "@/context/starlux-context";
+
 export default function AdminDashboardPage() {
-    const searchParams = useSearchParams();
+    const { db } = useStarlux();
+    const [searchParams] = useSearchParams();
     const activeTab = searchParams.get("tab") || "overview";
 
-    const stats = MOCK_STATS.admin.map(s => ({
-        ...s,
-        icon: s.label === "Total Revenue" ? <DollarSign /> :
-            s.label === "Total Hotels" ? <Hotel /> :
-                s.label === "Active Users" ? <Users /> :
-                    <ShieldAlert />,
-        color: s.label === "Total Revenue" ? "bg-primary/10 text-primary" :
-            s.label === "Total Hotels" ? "bg-accent/10 text-accent" :
-                s.label === "Active Users" ? "bg-blue-100 text-blue-600" :
-                    "bg-red-100 text-red-600"
-    }));
+    // Calculate dynamic stats with safety checks
+    const totalHotels = db.hotels?.length || 0;
+    const totalBookings = db.bookings?.length || 0;
+    const totalRevenue = (db.bookings || []).reduce((sum, b) => {
+        const p = Number(b.totalPrice);
+        return isNaN(p) ? sum : sum + p;
+    }, 0);
+    const platformCommission = Math.round(totalRevenue * 0.12);
+
+    const stats = [
+        { label: "Total Revenue", value: `$${totalRevenue.toLocaleString()}`, change: "+12.5%", icon: <DollarSign />, color: "bg-primary/10 text-primary" },
+        { label: "Total Hotels", value: totalHotels.toString(), change: "+2 today", icon: <Hotel />, color: "bg-accent/10 text-accent" },
+        { label: "Total Bookings", value: totalBookings.toString(), change: "+18%", icon: <Activity />, color: "bg-blue-100 text-blue-600" },
+        { label: "Commission (12%)", value: `$${platformCommission.toLocaleString()}`, change: "+5.4%", icon: <ShieldAlert />, color: "bg-red-100 text-red-600" }
+    ];
 
     return (
         <DashboardLayout role="admin">
@@ -178,11 +183,11 @@ export default function AdminDashboardPage() {
                         <div className="grid grid-cols-2 gap-4 mt-8">
                             <div className="p-6 bg-muted/30 rounded-2xl text-left border">
                                 <p className="text-xs text-muted-foreground uppercase font-black tracking-widest">Commission</p>
-                                <p className="text-2xl font-black text-secondary">$124,500</p>
+                                <p className="text-2xl font-black text-secondary">${(platformCommission || 0).toLocaleString()}</p>
                             </div>
                             <div className="p-6 bg-muted/30 rounded-2xl text-left border">
                                 <p className="text-xs text-muted-foreground uppercase font-black tracking-widest">Payouts</p>
-                                <p className="text-2xl font-black text-secondary">$1.2M</p>
+                                <p className="text-2xl font-black text-secondary">${((totalRevenue - platformCommission) || 0).toLocaleString()}</p>
                             </div>
                         </div>
                     </Card>

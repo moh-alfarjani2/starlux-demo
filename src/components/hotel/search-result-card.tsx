@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import { Star, MapPin, Heart, Share2 } from "lucide-react";
+import { Star, MapPin, Heart, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import Link from "next/link";
+import { Link } from "react-router-dom";
+import { useStarlux } from "@/context/starlux-context";
 
 interface SearchResultCardProps {
     id: string;
@@ -18,17 +19,26 @@ interface SearchResultCardProps {
 }
 
 export const SearchResultCard = ({ id, name, location, price, rating, image, reviews, amenities }: SearchResultCardProps) => {
+    const { db, toggleFavorite } = useStarlux();
+    const isFavorite = db.favorites.includes(id);
+
     return (
         <Card className="flex flex-col md:flex-row overflow-hidden group mb-6 bg-white border-none">
             {/* Image */}
             <div className="relative w-full md:w-80 h-64 md:h-auto overflow-hidden">
-                <img
-                    src={image}
-                    alt={name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <button className="absolute top-4 left-4 p-2 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all">
-                    <Heart size={20} />
+                <Link to={`/hotels/view?id=${id}`} className="block h-full">
+                    <img
+                        src={image}
+                        alt={name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                </Link>
+                <button
+                    onClick={() => toggleFavorite(id)}
+                    className={`absolute top-4 left-4 p-2 backdrop-blur-md rounded-full transition-all ${isFavorite ? "bg-primary text-white" : "bg-white/20 hover:bg-white/40 text-white"
+                        }`}
+                >
+                    <Heart size={20} className={isFavorite ? "fill-white" : ""} />
                 </button>
             </div>
 
@@ -40,7 +50,9 @@ export const SearchResultCard = ({ id, name, location, price, rating, image, rev
                             <MapPin size={14} />
                             <span className="text-xs font-semibold uppercase tracking-widest">{location}</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-secondary">{name}</h3>
+                        <Link to={`/hotels/view?id=${id}`} className="hover:text-primary transition-colors">
+                            <h3 className="text-2xl font-bold text-secondary">{name}</h3>
+                        </Link>
                     </div>
                     <div className="bg-primary/10 text-primary px-3 py-1 rounded-lg flex items-center gap-1">
                         <Star size={16} className="fill-primary" />
@@ -59,17 +71,19 @@ export const SearchResultCard = ({ id, name, location, price, rating, image, rev
                         </span>
                     ))}
                 </div>
+            </div>
 
-                <div className="mt-auto flex items-end justify-between border-t pt-6">
-                    <div className="flex items-baseline gap-1">
-                        <span className="text-sm text-muted-foreground">From</span>
-                        <span className="text-3xl font-black text-primary">${price}</span>
-                        <span className="text-sm text-muted-foreground decoration-accent/30 decoration-double">/ night</span>
-                    </div>
-                    <Link href={`/hotels/${id}`}>
-                        <Button variant="gold" className="rounded-full px-8">View Details</Button>
-                    </Link>
+            <div className="flex flex-col items-center justify-center p-6 border-t lg:border-t-0 lg:border-l lg:w-48 bg-muted/20">
+                <div className="text-center mb-4">
+                    <span className="text-xs text-muted-foreground block uppercase font-bold tracking-widest">Starts from</span>
+                    <span className="text-2xl font-black text-primary">${price}</span>
+                    <span className="text-[10px] text-muted-foreground block font-bold uppercase">per night</span>
                 </div>
+                <Link to={`/booking?hotel=${encodeURIComponent(name)}&price=${encodeURIComponent("$" + price.toString())}&image=${encodeURIComponent(image)}&location=${encodeURIComponent(location)}`} className="w-full">
+                    <Button variant="primary" className="w-full gap-2 rounded-xl group/btn">
+                        Book Now <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
+                    </Button>
+                </Link>
             </div>
         </Card>
     );

@@ -1,23 +1,32 @@
-"use client";
-
 import React from "react";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarDays, Heart, Star, MapPin, ChevronRight, Clock, ShieldCheck } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 import { MOCK_STATS } from "@/lib/mock-data";
+import { useStarlux } from "@/context/starlux-context";
 
 export default function GuestDashboardPage() {
-    const stats = MOCK_STATS.guest.map(s => ({
-        ...s,
-        icon: s.label === "Total Bookings" ? <CalendarDays className="text-primary" /> :
-            s.label === "Wishlist" ? <Heart className="text-red-500" /> :
-                s.label === "Reviews" ? <Star className="text-accent" /> :
-                    <ShieldCheck className="text-green-500" />
-    }));
+    const { db } = useStarlux();
+    const { profile, bookings } = db;
+
+    const stats = MOCK_STATS.guest.map((s: any) => {
+        let value = s.value;
+        if (s.label === "Total Bookings") value = bookings.length.toString();
+        if (s.label === "Wishlist") value = db.favorites.length.toString();
+
+        return {
+            ...s,
+            value,
+            icon: s.label === "Total Bookings" ? <CalendarDays className="text-primary" /> :
+                s.label === "Wishlist" ? <Heart className="text-red-500" /> :
+                    s.label === "Reviews" ? <Star className="text-accent" /> :
+                        <ShieldCheck className="text-green-500" />
+        };
+    });
 
     return (
         <DashboardLayout role="guest">
@@ -25,17 +34,17 @@ export default function GuestDashboardPage() {
                 {/* Welcome Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-secondary">Welcome back, John!</h1>
-                        <p className="text-muted-foreground italic">You have 2 upcoming bookings this month.</p>
+                        <h1 className="text-3xl font-bold text-secondary">Welcome back, {profile.firstName}!</h1>
+                        <p className="text-muted-foreground italic">You have {bookings.filter((b: any) => b.isUpcoming).length} upcoming bookings this month.</p>
                     </div>
-                    <Link href="/hotels">
+                    <Link to="/hotels">
                         <Button variant="gold" className="rounded-xl px-8 shadow-md">Book New Trip</Button>
                     </Link>
                 </div>
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {stats.map((stat, i) => (
+                    {stats.map((stat: any, i: number) => (
                         <Card key={i} className="p-6 border-none luxury-shadow bg-white flex items-center gap-4">
                             <div className={cn("p-3 rounded-xl", stat.color)}>
                                 {stat.icon}
@@ -54,7 +63,7 @@ export default function GuestDashboardPage() {
                     <div className="lg:col-span-2 space-y-6">
                         <div className="flex justify-between items-center">
                             <h2 className="text-xl font-bold text-secondary">Upcoming Bookings</h2>
-                            <Link href="/dashboard/bookings" className="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
+                            <Link to="/dashboard/bookings" className="text-sm font-bold text-primary flex items-center gap-1 hover:underline">
                                 View All <ChevronRight size={14} />
                             </Link>
                         </div>

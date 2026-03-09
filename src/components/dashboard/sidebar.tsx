@@ -1,8 +1,4 @@
-"use client";
-
-import React from "react";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import {
     LayoutDashboard,
     Settings,
@@ -32,8 +28,8 @@ interface DashboardSidebarProps {
 }
 
 export const DashboardSidebar = ({ role = "guest", isOpen, onClose }: DashboardSidebarProps) => {
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
+    const { pathname } = useLocation();
+    const [searchParams] = useSearchParams();
     const currentFullUrl = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
 
     const guestItems: SidebarItem[] = [
@@ -76,7 +72,7 @@ export const DashboardSidebar = ({ role = "guest", isOpen, onClose }: DashboardS
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 {/* Brand */}
-                <Link href="/" className="flex items-center space-x-3 mb-12">
+                <Link to="/" className="flex items-center space-x-3 mb-12">
                     <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center luxury-shadow shrink-0">
                         <span className="text-white font-bold text-xl">S</span>
                     </div>
@@ -94,7 +90,7 @@ export const DashboardSidebar = ({ role = "guest", isOpen, onClose }: DashboardS
                         return (
                             <Link
                                 key={item.href}
-                                href={item.href}
+                                to={item.href}
                                 className={cn(
                                     "relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group",
                                     isActive
@@ -122,7 +118,7 @@ export const DashboardSidebar = ({ role = "guest", isOpen, onClose }: DashboardS
                 {/* Footer Nav */}
                 <div className="mt-auto space-y-2">
                     <Link
-                        href="/settings"
+                        to="/settings"
                         className={cn(
                             "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300",
                             pathname === "/settings"

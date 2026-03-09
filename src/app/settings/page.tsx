@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,9 +24,40 @@ import {
 
 type SettingTab = "profile" | "notifications" | "security" | "billing";
 
+import { useStarlux } from "@/context/starlux-context";
+
 export default function SettingsPage() {
+    const { db, updateProfile } = useStarlux();
+    const profile = db.profile;
     const [activeTab, setActiveTab] = useState<SettingTab>("profile");
     const [showPassword, setShowPassword] = useState(false);
+
+    const [formData, setFormData] = useState({
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        email: profile.email,
+        phone: "+1 (555) 000-0000",
+        location: "New York, USA"
+    });
+
+    // Keep form in sync with global profile updates (e.g. from other tabs)
+    useEffect(() => {
+        setFormData(prev => ({
+            ...prev,
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            email: profile.email
+        }));
+    }, [profile.firstName, profile.lastName, profile.email]);
+
+    const handleSave = () => {
+        updateProfile({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email
+        });
+        alert("Profile updated successfully!");
+    };
 
     const tabs = [
         { id: "profile", label: "Profile Info", icon: <User size={18} /> },
@@ -82,46 +111,62 @@ export default function SettingsPage() {
                                 <div className="flex flex-col sm:flex-row items-center gap-6 pb-8 border-b">
                                     <div className="relative group">
                                         <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-3xl luxury-shadow-sm overflow-hidden">
-                                            JD
+                                            {profile.firstName?.charAt(0)}{profile.lastName?.charAt(0)}
                                         </div>
                                         <button className="absolute bottom-0 right-0 p-2 bg-white rounded-full luxury-shadow text-primary hover:scale-110 transition-transform">
                                             <Camera size={16} />
                                         </button>
                                     </div>
                                     <div className="text-center sm:text-left">
-                                        <h3 className="text-xl font-bold text-secondary">John Doe</h3>
+                                        <h3 className="text-xl font-bold text-secondary">{profile.firstName} {profile.lastName}</h3>
                                         <p className="text-sm text-muted-foreground italic">Elite Member • Joined Oct 2023</p>
                                     </div>
-                                    <Button variant="primary" className="sm:ml-auto rounded-xl">Save Changes</Button>
+                                    <Button variant="primary" className="sm:ml-auto rounded-xl" onClick={handleSave}>Save Changes</Button>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Full Name</label>
+                                        <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">First Name</label>
                                         <div className="relative">
-                                            <Input className="pl-10 h-12 bg-muted/20 border-none rounded-xl focus-visible:ring-primary/30" defaultValue="John Doe" />
+                                            <Input
+                                                className="pl-10 h-12 bg-muted/20 border-none rounded-xl focus-visible:ring-primary/30"
+                                                value={formData.firstName}
+                                                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                            />
+                                            <User className="absolute left-3 top-3.5 text-muted-foreground/50" size={18} />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Last Name</label>
+                                        <div className="relative">
+                                            <Input
+                                                className="pl-10 h-12 bg-muted/20 border-none rounded-xl focus-visible:ring-primary/30"
+                                                value={formData.lastName}
+                                                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                            />
                                             <User className="absolute left-3 top-3.5 text-muted-foreground/50" size={18} />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Email Address</label>
                                         <div className="relative">
-                                            <Input className="pl-10 h-12 bg-muted/20 border-none rounded-xl focus-visible:ring-primary/30" defaultValue="john.doe@starlux.com" />
+                                            <Input
+                                                className="pl-10 h-12 bg-muted/20 border-none rounded-xl focus-visible:ring-primary/30"
+                                                value={formData.email}
+                                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            />
                                             <Mail className="absolute left-3 top-3.5 text-muted-foreground/50" size={18} />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Phone Number</label>
                                         <div className="relative">
-                                            <Input className="pl-10 h-12 bg-muted/20 border-none rounded-xl focus-visible:ring-primary/30" defaultValue="+1 (555) 000-0000" />
+                                            <Input
+                                                className="pl-10 h-12 bg-muted/20 border-none rounded-xl focus-visible:ring-primary/30"
+                                                value={formData.phone}
+                                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                            />
                                             <Phone className="absolute left-3 top-3.5 text-muted-foreground/50" size={18} />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Location</label>
-                                        <div className="relative">
-                                            <Input className="pl-10 h-12 bg-muted/20 border-none rounded-xl focus-visible:ring-primary/30" defaultValue="New York, USA" />
-                                            <Globe className="absolute left-3 top-3.5 text-muted-foreground/50" size={18} />
                                         </div>
                                     </div>
                                 </div>

@@ -122,7 +122,33 @@ export const MOCK_STATS = {
     ]
 };
 
-export const MOCK_BOOKINGS = [
+export interface Booking {
+    id: string;
+    hotel: string;
+    location: string;
+    dates: string;
+    price: string;
+    status: string;
+    image: string;
+    isUpcoming: boolean;
+}
+
+export interface UserProfile {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    country: string;
+    membership: string;
+    stats: {
+        points: string;
+        stays: number;
+    }
+}
+
+export const MOCK_BOOKINGS: Booking[] = [
     {
         id: "SLX-A1B2C3D4",
         hotel: "The Grand Burj Resort",
@@ -164,7 +190,7 @@ export const MOCK_FAVORITES = [
     }
 ];
 
-export const MOCK_USER_PROFILE = {
+export const MOCK_USER_PROFILE: UserProfile = {
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@example.com",

@@ -1,3 +1,4 @@
+import React from "react";
 import { BaseLayout } from "@/components/layout/base-layout";
 import { Hero } from "@/components/sections/hero";
 import { FeaturedHotels } from "@/components/sections/featured-hotels";
