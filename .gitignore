@@ -13,13 +13,8 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
-/build
-/dist
+# (Removed exclusions to allow full upload)
 
 # misc
 .DS_Store
