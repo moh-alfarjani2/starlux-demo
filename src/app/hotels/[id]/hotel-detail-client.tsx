@@ -5,17 +5,15 @@ import { BaseLayout } from "@/components/layout/base-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Star, MapPin, Users, BedDouble, Square, CheckCircle2 } from "lucide-react";
-import Link from "next/link";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 
 import { MOCK_HOTELS } from "@/lib/mock-data";
 
-import { useParams, useSearchParams } from "next/navigation";
 import { getDB } from "@/lib/db";
-import { MapPin } from "lucide-react";
 
 export default function HotelDetailClient() {
     const params = useParams();
-    const searchParams = useSearchParams();
+    const [searchParams] = useSearchParams();
     const db = getDB();
 
     // Support both path segment and query parameter for maximum flexibility
@@ -142,7 +140,7 @@ export default function HotelDetailClient() {
                                                 <span className="text-xs text-muted-foreground block">Per night</span>
                                                 <span className="text-3xl font-black text-primary">${room.price}</span>
                                             </div>
-                                            <Link href="/booking" className="w-full">
+                                            <Link to="/booking" className="w-full">
                                                 <Button variant="gold" className="w-full rounded-xl">Book Now</Button>
                                             </Link>
                                         </div>
